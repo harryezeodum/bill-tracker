@@ -18,7 +18,7 @@ authRouter.route("/signup")
             else {
                 const newUser = new User(req.body);
                 await newUser.save();
-                const token = jwt.sign(newUser.withoutPassword(), process.env.SECRET)
+                const token = jwt.sign(newUser.withoutPassword(), process.env.SECRET, { expiresIn: "12h" });
                 return res.status(201).send({ token, user: newUser.withoutPassword() });
             }
         }
@@ -52,7 +52,7 @@ authRouter.route("/login")
                     return next(error);
                 }
                 else {
-                    const token = jwt.sign(user.withoutPassword(), process.env.SECRET, { expiresIn: "10s" });
+                    const token = jwt.sign(user.withoutPassword(), process.env.SECRET, { expiresIn: "12h" });
                     return res.status(200).send({ token, user: user.withoutPassword() });
                 }
             });
